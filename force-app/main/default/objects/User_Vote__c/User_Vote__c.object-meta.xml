@@ -152,7 +152,7 @@
     <enableSearch>true</enableSearch>
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
-    <externalSharingModel>ReadWrite</externalSharingModel>
+    <externalSharingModel>ControlledByParent</externalSharingModel>
     <label>User Vote</label>
     <nameField>
         <label>User Vote Name</label>
@@ -160,6 +160,6 @@
     </nameField>
     <pluralLabel>User Votes</pluralLabel>
     <searchLayouts></searchLayouts>
-    <sharingModel>ReadWrite</sharingModel>
+    <sharingModel>ControlledByParent</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>
