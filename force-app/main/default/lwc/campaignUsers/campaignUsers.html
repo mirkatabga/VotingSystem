@@ -1,0 +1,47 @@
+<template>
+    <lightning-card title="Campaign Users" if:true={mappedData}>
+        <lightning-layout horizontal-align="center">
+            <lightning-layout-item size="2" class="slds-p-around_small">
+                <lightning-layout horizontal-align="center">
+                    <lightning-layout-item class="min-range" size="1"><label>2</label></lightning-layout-item>
+                    <lightning-layout-item size="6">
+                        <lightning-input type="range" min="2" max="10" value={pageSize} label="Record per page"
+                            onchange={handleChangeRecords}></lightning-input>
+                    </lightning-layout-item>
+                    <lightning-layout-item class="max-range" size="1"><label>10</label></lightning-layout-item>
+                </lightning-layout>
+            </lightning-layout-item>
+            <lightning-layout-item size="4" class="slds-p-around_small">
+                <lightning-input type="search" label="Search By Name" onchange={handleSearch}></lightning-input>
+            </lightning-layout-item>
+            <lightning-layout-item size="4" class="slds-p-around_small">
+                <lightning-combobox name="progress" label="Role" value={selectedRole} placeholder="Select Role"
+                    options={comboBoxOptions} onchange={handleRoleChange}></lightning-combobox>
+            </lightning-layout-item>
+        </lightning-layout>
+        <div style="height: 300px;">
+            <lightning-datatable key-field="id" hide-checkbox-column="true" data={recordsToDisplay} columns={columns}>
+            </lightning-datatable>
+        </div>
+        <div class="slds-align_absolute-center" style="height:5rem">
+            <lightning-button disabled={disableFirst} icon-name="utility:chevronleft" label="Previous"
+                alternative-text="Previous" onclick={previousPage}></lightning-button>
+            &nbsp;
+            <span class="slds-badge">Showing {pageNumber} &nbsp;of&nbsp; {totalPages} &nbsp;&nbsp;Page(s)</span>
+            &nbsp;
+            <lightning-button disabled={disableLast} icon-name="utility:chevronright" label="Next"
+                alternative-text="Next" onclick={nextPage} class="slds-p-horizontal_x-small" icon-position="right">
+            </lightning-button>
+        </div>
+        <div class="slds-clearfix">
+            <div class="slds-float_right">
+                <span class="slds-badge"> Total Records: {totalRecords}</span>
+            </div>
+        </div>
+    </lightning-card>
+    <template if:true={error}>
+        <div class="slds-m-around_medium">
+            {error}
+        </div>
+    </template>
+</template>
