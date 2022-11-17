@@ -30,7 +30,6 @@ export default class CampaignUsers extends LightningElement {
             this.handlePagination();
             this.error = undefined;
         } else if (error) {
-            console.log(error);
             this.error = error;
             this.data = undefined;
         }
