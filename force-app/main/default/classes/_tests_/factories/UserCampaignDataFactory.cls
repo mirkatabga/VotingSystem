@@ -16,7 +16,9 @@ public with sharing class UserCampaignDataFactory {
             ProfileId = testProfile.Id);
         insert testUser;
 
-        User_Campaign__c userCampaign = new User_Campaign__c(Name='Test User Campaign', Campaign_Id__c=testCampaign.Id, User_Id__c=testUser.Id);
+        User_Campaign__c userCampaign = new User_Campaign__c(Name='Test User Campaign',
+            Campaign_Id__c=testCampaign.Id,
+            User_Id__c=testUser.Id);
         insert userCampaign;
 
         return userCampaign;
