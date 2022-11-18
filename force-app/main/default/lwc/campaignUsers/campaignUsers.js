@@ -2,6 +2,9 @@ import { LightningElement, api, wire, track } from 'lwc';
 import getUserByCampaign from '@salesforce/apex/UserCampaignController.getUserByCampaign';
 
 export default class CampaignUsers extends LightningElement {
+    @api recordId;
+    data;
+    error;
     mappedData;
     pageSize = 4;
     pageNumber = 1;
@@ -15,10 +18,6 @@ export default class CampaignUsers extends LightningElement {
         { label: 'Role', fieldName: 'role', type: 'text', sortable: true },
         { label: 'Creator Name', fieldName: 'creatorName', type: 'text', sortable: true },
     ];
-
-    @track data;
-    @track error;
-    @api recordId;
 
     @wire(getUserByCampaign, { campaignId: '$recordId' })
     wiredRecordsMethod({ error, data }) {
@@ -147,7 +146,7 @@ export default class CampaignUsers extends LightningElement {
         return this.pageNumber == this.totalPages;
     }
 
-    get comboBoxOptions() {
+    get userRoleOptions() {
         return [
             { label: 'Voter Role', value: 'voter' },
             { label: 'Moderator Role', value: 'moderator' },
