@@ -47,7 +47,6 @@ private class UserCampaignControllerTests {
         // Act
          UserCampaignController.saveCampaignUsers(newUsers, insertedUserCampaign.Campaign_Id__c);
         
-
         // Assert
         List<User_Campaign__c> populatedUsers = [SELECT Id, Name FROM User_Campaign__c];
         System.assertEquals(1, populatedUsers.size());
