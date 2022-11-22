@@ -1,15 +1,19 @@
-import { LightningElement, api, wire, track } from 'lwc';
+import { LightningElement, api } from 'lwc';
+import { NavigationMixin } from 'lightning/navigation';
 import getUserByCampaign from '@salesforce/apex/UserCampaignController.getUserByCampaign';
+import { subscribe, unsubscribe } from 'lightning/empApi';
 
-export default class CampaignUsers extends LightningElement {
+export default class CampaignUsers extends NavigationMixin(LightningElement) {
     @api recordId;
     data;
     error;
-    mappedData;
+
     pageSize = 4;
     pageNumber = 1;
     totalRecords = 0;
     totalPages = 1;
+
+    mappedData;
     recordsToDisplay;
     initialRecords;
     selectedRole = 'all';
@@ -19,19 +23,39 @@ export default class CampaignUsers extends LightningElement {
         { label: 'Creator Name', fieldName: 'creatorName', type: 'text', sortable: true },
     ];
 
-    @wire(getUserByCampaign, { campaignId: '$recordId' })
-    wiredRecordsMethod({ error, data }) {
-        if (data) {
-            this.data = data;
-            this.mappedData = this.mapData();
-            this.initialRecords = this.mappedData;
-            this.totalRecords = this.mappedData.length;
-            this.handlePagination();
-            this.error = undefined;
-        } else if (error) {
-            this.error = error;
-            this.data = undefined;
-        }
+    subscription = {};
+    CHANNEL_NAME = '/event/Refresh_Record_Event__e';
+
+    connectedCallback() {
+        this.fetchUserCampaign();
+        subscribe(this.CHANNEL_NAME, -1, this.manageEvent).then(response => {
+            this.subscription = response;
+        });
+    }
+
+    manageEvent = event => {
+        this.fetchUserCampaign();
+    }
+
+    fetchUserCampaign() {
+        getUserByCampaign({ campaignId: this.recordId })
+            .then(result => {
+                this.data = result;
+                this.mappedData = this.mapData();
+                this.initialRecords = this.mappedData;
+                this.totalRecords = this.mappedData.length;
+                this.handlePagination();
+                this.error = undefined;
+            })
+            .catch(error => {
+                this.error = error;
+                this.data = undefined;
+            });
+    }
+
+    disconnectedCallback() {
+        unsubscribe(this.subscription);
+        this.subscription = null;
     }
 
     previousPage() {
