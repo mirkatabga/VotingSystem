@@ -99,8 +99,7 @@ export default class CampaignUsers extends NavigationMixin(LightningElement) {
             if (this.mappedData) {
                 let searchRecords = [];
                 for (let record of this.mappedData) {
-                    let recordName = record.name;
-                    let strVal = String(recordName);
+                    let strVal = String(record.name);
                     if (strVal) {
                         if (strVal.toLowerCase().includes(searchKey)) {
                             searchRecords.push(record);
@@ -131,8 +130,7 @@ export default class CampaignUsers extends NavigationMixin(LightningElement) {
             if (this.mappedData && this.selectedRole !== 'all') {
                 let searchRecords = [];
                 for (let record of this.mappedData) {
-                    let recordRole = record.role;
-                    let strVal = String(recordRole);
+                    let strVal = String(record.role);
                     if (strVal) {
                         if (strVal.toLowerCase().includes(this.selectedRole)) {
                             searchRecords.push(record);

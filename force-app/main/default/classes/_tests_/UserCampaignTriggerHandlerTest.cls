@@ -1,6 +1,6 @@
 @isTest
 private class UserCampaignTriggerHandlerTest {
-    @isTest 
+    @isTest
     static void TestGetUserCampaignRecordType() {
         // Act
         User_Campaign__c testUserCampaign = UserCampaignDataFactory.creatCampaignWithUsers();

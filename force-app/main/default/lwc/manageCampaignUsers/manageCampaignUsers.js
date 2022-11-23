@@ -188,7 +188,7 @@ export default class ManageCampaignUsers extends NavigationMixin(LightningElemen
         return result;
     }
 
-    get comboBoxOptions() {
+    get userRoleOptions() {
         return [
             { label: 'Voters', value: 'Voter' },
             { label: 'Moderators', value: 'Moderator' },

@@ -3,7 +3,7 @@
         <lightning-layout horizontal-align="center">
             <lightning-layout-item size="4" class="slds-p-around_small">
                 <lightning-combobox name="roles" label="Role" value={selectedRole} placeholder="Select Role"
-                    options={comboBoxOptions} onchange={handleRoleChange}></lightning-combobox>
+                    options={userRoleOptions} onchange={handleRoleChange}></lightning-combobox>
             </lightning-layout-item>
         </lightning-layout>
         <lightning-dual-listbox class="slds-p-around_large" name="languages" label="Select Users"
