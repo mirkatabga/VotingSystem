@@ -14,11 +14,10 @@ public with sharing class UserCampaignController {
         return [
             SELECT Id, PermissionSetId, PermissionSet.Name, AssigneeId, Assignee.Name
             FROM PermissionSetAssignment
-            WHERE
-                PermissionSet.Name = 'Voter_User'
-                OR PermissionSet.Name = 'Configurator_User'
-                OR PermissionSet.Name = 'Moderator_User'
-                OR PermissionSet.Name = 'Analyst_User'
+            WHERE PermissionSet.Name = :Constants.VOTER_PERMISSION_SET
+                OR PermissionSet.Name = :Constants.CONFIGURATOR_PERMISSION_SET
+                OR PermissionSet.Name = :Constants.MODERATOR_PERMISSION_SET
+                OR PermissionSet.Name = :Constants.Analyst_PERMISSION_SET
             WITH SECURITY_ENFORCED
         ];
     }
@@ -44,7 +43,7 @@ public with sharing class UserCampaignController {
         return [
             SELECT Id, Name
             FROM RecordType
-            WHERE sObjectType = 'User_Campaign__c'
+            WHERE sObjectType = :Constants.USER_CAMPAIGN_TYPE
         ];
     }
 }

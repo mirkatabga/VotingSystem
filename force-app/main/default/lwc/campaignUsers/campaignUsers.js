@@ -162,10 +162,10 @@ export default class CampaignUsers extends NavigationMixin(LightningElement) {
     }
 
     get disableFirst() {
-        return this.pageNumber == 1;
+        return this.pageNumber === 1;
     }
     get disableLast() {
-        return this.pageNumber == this.totalPages;
+        return this.pageNumber === this.totalPages;
     }
 
     get userRoleOptions() {

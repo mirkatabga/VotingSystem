@@ -16,11 +16,7 @@ public with sharing class UserCampaignTriggerHandler {
             eventList.add(refreshEventObj);
         }
 
-        try {
-            if (eventList <> null && !eventList.isEmpty())
-                EventBus.publish(eventList);
-        } catch (Exception e) {
-            System.debug('Exception during publishing of refresh platform events-->' + e.getMessage());
-        }
+        if (eventList <> null && !eventList.isEmpty())
+            EventBus.publish(eventList);
     }
 }

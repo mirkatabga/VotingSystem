@@ -3,10 +3,12 @@ import getUserByCampaign from '@salesforce/apex/UserCampaignController.getUserBy
 import getPotentialCampaignUsers from '@salesforce/apex/UserCampaignController.getPotentialCampaignUsers';
 import saveCampaignUsers from '@salesforce/apex/UserCampaignController.saveCampaignUsers';
 import getUserCampaignRecordType from '@salesforce/apex/UserCampaignController.getUserCampaignRecordType';
+import isUserConfigurator from '@salesforce/apex/UserController.isUserConfigurator';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { CloseActionScreenEvent } from 'lightning/actions';
 import { NavigationMixin } from 'lightning/navigation';
 import { subscribe, unsubscribe } from 'lightning/empApi';
+import Id from '@salesforce/user/Id';
 
 export default class ManageCampaignUsers extends NavigationMixin(LightningElement) {
     @api recordId;
@@ -15,6 +17,7 @@ export default class ManageCampaignUsers extends NavigationMixin(LightningElemen
     allPotentialUsers;
     allCampaignUsers;
     userRoles;
+    isConfigurator;
 
     subscription = {};
     CHANNEL_NAME = '/event/Refresh_Record_Event__e';
@@ -57,6 +60,16 @@ export default class ManageCampaignUsers extends NavigationMixin(LightningElemen
         } else if (error) {
             this.error = error;
             this.data = undefined;
+        }
+    }
+
+    @wire(isUserConfigurator, { userId: Id })
+    wireUserPermissionSet({ error, data }) {
+        if (data) {
+            this.isConfigurator = data;
+            console.log(data);
+        } else if (error) {
+            this.error = error;
         }
     }
 
@@ -118,8 +131,6 @@ export default class ManageCampaignUsers extends NavigationMixin(LightningElemen
 
     handleRoleChange(event) {
         this.selectedRole = event.detail.value;
-        this.userOptions;
-        this.selectedUsers;
     }
 
     handleSave(event) {
@@ -159,8 +170,6 @@ export default class ManageCampaignUsers extends NavigationMixin(LightningElemen
             val => selectedUsers.find(x => x === val.id && val.role.includes(this.selectedRole))
         );
         this.allCampaignUsers.push(...movedUsers);
-        this.userOptions;
-        this.selectedUsers;
     }
 
     get userOptions() {
