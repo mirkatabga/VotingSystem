@@ -1,5 +1,5 @@
 import { LightningElement, wire, api } from 'lwc';
-import getUserByCampaign from '@salesforce/apex/UserCampaignController.getUserByCampaign';
+import getUserByCampaignCacheable from '@salesforce/apex/UserCampaignController.getUserByCampaignCacheable';
 import getPotentialCampaignUsers from '@salesforce/apex/UserCampaignController.getPotentialCampaignUsers';
 import saveCampaignUsers from '@salesforce/apex/UserCampaignController.saveCampaignUsers';
 import getUserCampaignRecordType from '@salesforce/apex/UserCampaignController.getUserCampaignRecordType';
@@ -7,8 +7,8 @@ import isUserConfigurator from '@salesforce/apex/UserController.isUserConfigurat
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { CloseActionScreenEvent } from 'lightning/actions';
 import { NavigationMixin } from 'lightning/navigation';
-import { subscribe, unsubscribe } from 'lightning/empApi';
 import Id from '@salesforce/user/Id';
+import { refreshApex } from '@salesforce/apex';
 
 export default class ManageCampaignUsers extends NavigationMixin(LightningElement) {
     @api recordId;
@@ -18,38 +18,23 @@ export default class ManageCampaignUsers extends NavigationMixin(LightningElemen
     allCampaignUsers;
     userRoles;
     isConfigurator;
+    usersData;
+    isComponentLoaded = false;
 
     subscription = {};
     CHANNEL_NAME = '/event/Refresh_Record_Event__e';
 
-    connectedCallback() {
-        setTimeout(() => {
-            this.fetchUserCampaign();
-            subscribe(this.CHANNEL_NAME, -1, this.manageEvent).then(response => {
-                this.subscription = response;
-            });
-        }, 5);
-    }
-
-    manageEvent = event => {
-        this.fetchUserCampaign();
-    }
-
-    disconnectedCallback() {
-        unsubscribe(this.subscription);
-        this.subscription = null;
-    }
-
-    fetchUserCampaign() {
-        getUserByCampaign({ campaignId: this.recordId })
-            .then(result => {
-                this.allCampaignUsers = this.mapUsers(result, false);
-                this.error = undefined;
-            })
-            .catch(error => {
-                this.error = error;
-                this.data = undefined;
-            });
+    @wire(getUserByCampaignCacheable, { campaignId: '$recordId' })
+    wiredUserByCampaign(value) {
+        this.usersData = value;
+        const { data, error } = value;
+        if (data) {
+            this.allCampaignUsers = this.mapUsers(data, false);
+            this.error = undefined;
+        } else if (error) {
+            this.error = error;
+            this.data = undefined;
+        }
     }
 
     @wire(getUserCampaignRecordType)
@@ -67,7 +52,7 @@ export default class ManageCampaignUsers extends NavigationMixin(LightningElemen
     wireUserPermissionSet({ error, data }) {
         if (data) {
             this.isConfigurator = data;
-            console.log(data);
+            this.isComponentLoaded = true;
         } else if (error) {
             this.error = error;
         }
@@ -133,7 +118,7 @@ export default class ManageCampaignUsers extends NavigationMixin(LightningElemen
         this.selectedRole = event.detail.value;
     }
 
-    handleSave(event) {
+    handleSave() {
         let campaignUsers = this.mapSelectedCampaignUsers();
         saveCampaignUsers({ campaignUsers: campaignUsers, campaignId: this.recordId })
             .then(result => {
@@ -148,6 +133,9 @@ export default class ManageCampaignUsers extends NavigationMixin(LightningElemen
                         }),
                     );
                     this.dispatchEvent(new CloseActionScreenEvent());
+                    refreshApex(this.usersData).then(() => {
+                        this.allCampaignUsers = this.mapUsers(this.usersData.data, false);
+                    })
                 }
             })
             .catch(error => {

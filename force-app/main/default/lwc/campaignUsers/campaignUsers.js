@@ -33,7 +33,7 @@ export default class CampaignUsers extends NavigationMixin(LightningElement) {
         });
     }
 
-    manageEvent = event => {
+    manageEvent = () => {
         this.fetchUserCampaign();
     }
 

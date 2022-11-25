@@ -1,12 +1,12 @@
 public with sharing class UserCampaignController {
     @AuraEnabled
     public static List<SObject> getUserByCampaign(String campaignId) {
-        return [
-            SELECT Name, User_Id__c, RecordType.Name, User_Id__r.Name, CreatedBy.Name
-            FROM User_Campaign__c
-            WHERE Campaign_Id__c = :campaignId
-            WITH SECURITY_ENFORCED
-        ];
+        return getCampaignUsers(campaignId);
+    }
+
+    @AuraEnabled(cacheable=true)
+    public static List<SObject> getUserByCampaignCacheable(String campaignId) {
+        return getCampaignUsers(campaignId);
     }
 
     @AuraEnabled(cacheable=true)
@@ -44,6 +44,15 @@ public with sharing class UserCampaignController {
             SELECT Id, Name
             FROM RecordType
             WHERE sObjectType = :Constants.USER_CAMPAIGN_TYPE
+        ];
+    }
+
+    private static List<SObject> getCampaignUsers(String campaignId) {
+        return [
+            SELECT Name, User_Id__c, RecordType.Name, User_Id__r.Name, CreatedBy.Name
+            FROM User_Campaign__c
+            WHERE Campaign_Id__c = :campaignId
+            WITH SECURITY_ENFORCED
         ];
     }
 }
