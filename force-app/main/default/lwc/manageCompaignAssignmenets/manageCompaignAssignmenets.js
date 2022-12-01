@@ -6,7 +6,8 @@ export default class ManageCampaignAssignments extends LightningElement {
 
     async handleClick() {
         await ManageCampaignAssignmentsModal.open({
-            size: 'large'
+            size: 'large',
+            recordId: this.recordId
         });
     }
 }

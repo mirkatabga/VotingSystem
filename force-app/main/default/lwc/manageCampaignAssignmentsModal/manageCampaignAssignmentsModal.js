@@ -6,7 +6,8 @@ export default class ManageCampaignAssignmentsModal extends LightningModal {
     @api recordId;
 
     connectedCallback(){
-        console.log(this.recordId);
+        console.log('In connected call back function....');
+        this.getAssignments();
     }
 
     handleClose(){
@@ -17,5 +18,20 @@ export default class ManageCampaignAssignmentsModal extends LightningModal {
     handleSave(){
         console.log('success handler');
         this.close('success');
+    }
+
+    getAssignments(){
+            // getCampaignAssignments(this.recordId, 'Configurators')
+            // .then((result) => console.log(result))
+            // .catch((error) => console.log(error));
+
+        // let assignments = {
+        //     configurators: getCampaignAssignments(this.recordId, 'Configurators'),
+        //     voters: getCampaignAssignments(this.recordId, 'Voters'),
+        //     moderators: getCampaignAssignments(this.recordId, 'Moderators'),
+        //     analysts: getCampaignAssignments(this.recordId, 'Analysts'),
+        // }
+
+        //return assignments;
     }
 }
