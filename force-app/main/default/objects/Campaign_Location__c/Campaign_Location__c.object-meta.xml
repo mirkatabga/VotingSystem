@@ -154,12 +154,13 @@
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
     <externalSharingModel>ControlledByParent</externalSharingModel>
-    <label>Capaign Location</label>
+    <label>Campaign Location</label>
     <nameField>
-        <label>Campa Name</label>
-        <type>Text</type>
+        <displayFormat>Location-{0}</displayFormat>
+        <label>Name</label>
+        <type>AutoNumber</type>
     </nameField>
-    <pluralLabel>Capaign Locations</pluralLabel>
+    <pluralLabel>Campaign Locations</pluralLabel>
     <searchLayouts></searchLayouts>
     <sharingModel>ControlledByParent</sharingModel>
     <visibility>Public</visibility>

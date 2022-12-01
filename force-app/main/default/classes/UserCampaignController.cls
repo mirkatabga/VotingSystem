@@ -23,6 +23,22 @@ public with sharing class UserCampaignController {
     }
 
     @AuraEnabled
+    public static void saveCampaignLocations(List<Campaign_Location__c> campaignLocations, Id campaignId) {
+        try {
+            List<Campaign_Location__c> prevCampaignLocations = [
+                SELECT Id
+                FROM Campaign_Location__c
+                WHERE Campaign_Id__c = :campaignId
+            ];
+
+            delete prevCampaignLocations;
+            insert campaignLocations;
+        } catch (Exception ex) {
+            throw new AuraHandledException(ex.getMessage());
+        }
+    }
+
+    @AuraEnabled
     public static void saveCampaignUsers(List<User_Campaign__c> campaignUsers, Id campaignId) {
         try {
             List<User_Campaign__c> prevCampaignUsers = [

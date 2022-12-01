@@ -2,6 +2,8 @@ import { LightningElement, api } from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
 import getUserByCampaign from '@salesforce/apex/UserCampaignController.getUserByCampaign';
 import { subscribe, unsubscribe } from 'lightning/empApi';
+const CHANNEL_NAME = '/event/Refresh_Record_Event__e';
+const ALL_USERS = 'all';
 
 export default class CampaignUsers extends NavigationMixin(LightningElement) {
     @api recordId;
@@ -16,7 +18,7 @@ export default class CampaignUsers extends NavigationMixin(LightningElement) {
     mappedData;
     recordsToDisplay;
     initialRecords;
-    selectedRole = 'all';
+    selectedRole = ALL_USERS;
     columns = [
         { label: 'Name', fieldName: 'name', sortable: true },
         { label: 'Role', fieldName: 'role', type: 'text', sortable: true },
@@ -24,11 +26,10 @@ export default class CampaignUsers extends NavigationMixin(LightningElement) {
     ];
 
     subscription = {};
-    CHANNEL_NAME = '/event/Refresh_Record_Event__e';
 
     connectedCallback() {
         this.fetchUserCampaign();
-        subscribe(this.CHANNEL_NAME, -1, this.manageEvent).then(response => {
+        subscribe(CHANNEL_NAME, -1, this.manageEvent).then(response => {
             this.subscription = response;
         });
     }
@@ -92,7 +93,7 @@ export default class CampaignUsers extends NavigationMixin(LightningElement) {
     }
 
     handleSearch(event) {
-        this.selectedRole = 'all';
+        this.selectedRole = ALL_USERS;
         const searchKey = event.target.value.toLowerCase();
         if (searchKey) {
             this.mappedData = this.initialRecords;
@@ -127,7 +128,7 @@ export default class CampaignUsers extends NavigationMixin(LightningElement) {
         });
         if (this.selectedRole) {
             this.mappedData = this.initialRecords;
-            if (this.mappedData && this.selectedRole !== 'all') {
+            if (this.mappedData && this.selectedRole !== ALL_USERS) {
                 let searchRecords = [];
                 for (let record of this.mappedData) {
                     let strVal = String(record.role);
@@ -174,7 +175,7 @@ export default class CampaignUsers extends NavigationMixin(LightningElement) {
             { label: 'Moderator Role', value: 'moderator' },
             { label: 'Configurator Role', value: 'configurator' },
             { label: 'Analyst Role', value: 'analyst' },
-            { label: 'All Role', value: 'all' },
+            { label: 'All Role', value: ALL_USERS },
         ];
     }
 }

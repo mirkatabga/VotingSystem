@@ -22,7 +22,6 @@ export default class ManageCampaignUsers extends NavigationMixin(LightningElemen
     isComponentLoaded = false;
 
     subscription = {};
-    CHANNEL_NAME = '/event/Refresh_Record_Event__e';
 
     @wire(getUserByCampaignCacheable, { campaignId: '$recordId' })
     wiredUserByCampaign(value) {

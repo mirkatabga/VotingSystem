@@ -1,9 +1,9 @@
 @IsTest
-private class UserControllerTest {
+private class UserControllerTests {
     @isTest
     static void TestIsUserConfigurator() {
         // Arrange
-        User_Campaign__c testUserCampaign = UserCampaignDataFactory.creatCampaignWithUsers();
+        User_Campaign__c testUserCampaign = VotingDataFactory.creatCampaignWithUsers();
 
         // Act
         Boolean result = UserController.isUserConfigurator(testUserCampaign.User_Id__c);
