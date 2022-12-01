@@ -24,6 +24,17 @@
                     onchange={handleChange}>
                 </lightning-dual-listbox>
             </lightning-tab>
+            <lightning-tab label="Configurators"> 
+                <lightning-dual-listbox name="configuratorsDLB"
+                    label="Assign Configurators to Campaign"
+                    data-type="Configurators"
+                    source-label="Available"
+                    selected-label="Assigned"
+                    field-level-help="Allows specific configurator to see and manage users for the campaign."
+                    options={options}
+                    onchange={handleChange}>
+                </lightning-dual-listbox>
+            </lightning-tab>
             <lightning-tab label="Analysts">
                 <lightning-dual-listbox name="analystsDLB"
                     label="Assign Analysts to Campaign"
