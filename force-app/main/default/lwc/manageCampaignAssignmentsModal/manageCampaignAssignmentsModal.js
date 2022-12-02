@@ -1,13 +1,26 @@
 import { api } from 'lwc';
 import LightningModal from 'lightning/modal';
-import getCampaignAssignments from '@salesforce/apex/CampaignController.getCampaignAssignments';
+import getUsers from '@salesforce/apex/UserController.getUsers';
+import getAssignedUserIds from '@salesforce/apex/CampaignController.getAssignedUserIds';
 
 export default class ManageCampaignAssignmentsModal extends LightningModal {
     @api recordId;
 
-    connectedCallback(){
-        console.log('In connected call back function....');
-        this.getAssignments();
+    userOptions = [];
+    voterValues = [];
+    moderatorValues = [];
+    configuratorValues = [];
+    analystValues = [];
+
+    async connectedCallback(){
+        const users = await this.fetchUsers();
+        this.userOptions = this.mapUsersToOptions(users);
+        const results = await this.fetchAssignments();
+
+        this.voterValues.push(...results[0]);
+        this.moderatorValues.push(...results[1]);
+        this.configuratorValues.push(...results[2]);
+        this.analystValues.push(...results[3]);
     }
 
     handleClose(){
@@ -20,18 +33,33 @@ export default class ManageCampaignAssignmentsModal extends LightningModal {
         this.close('success');
     }
 
-    getAssignments(){
-            // getCampaignAssignments(this.recordId, 'Configurators')
-            // .then((result) => console.log(result))
-            // .catch((error) => console.log(error));
+    handleChange(event){
+        console.log(event.target);
+    }
 
-        // let assignments = {
-        //     configurators: getCampaignAssignments(this.recordId, 'Configurators'),
-        //     voters: getCampaignAssignments(this.recordId, 'Voters'),
-        //     moderators: getCampaignAssignments(this.recordId, 'Moderators'),
-        //     analysts: getCampaignAssignments(this.recordId, 'Analysts'),
-        // }
+    fetchUsers(){
+        return getUsers();
+    }
 
-        //return assignments;
+    fetchAssignments(){
+        const promises = [
+            getAssignedUserIds({ campaignId: this.recordId, userType: 'Voter' }),
+            getAssignedUserIds({ campaignId: this.recordId, userType: 'Moderator' }),
+            getAssignedUserIds({ campaignId: this.recordId, userType: 'Configurator' }),
+            getAssignedUserIds({ campaignId: this.recordId, userType: 'Analyst' })
+        ];
+
+        return Promise.all(promises)
+    }
+
+    mapUsersToOptions(users){
+        const options = users.map((user) => {
+            return {
+                label: user.Name,
+                value: user.Id
+            };
+        });
+
+        return options;
     }
 }

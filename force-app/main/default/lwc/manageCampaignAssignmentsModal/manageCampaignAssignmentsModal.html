@@ -9,7 +9,8 @@
                     source-label="Available"
                     selected-label="Assigned"
                     field-level-help="Allows specific voters to see and vote in the campaign."
-                    options={options}
+                    options={userOptions}
+                    value={voterValues}
                     onchange={handleChange}>
                 </lightning-dual-listbox>
             </lightning-tab>
@@ -20,7 +21,8 @@
                     source-label="Available"
                     selected-label="Assigned"
                     field-level-help="Allows specific moderators to see, start/stop and view statistics for the campaign."
-                    options={options}
+                    options={userOptions}
+                    value={moderatorValues}
                     onchange={handleChange}>
                 </lightning-dual-listbox>
             </lightning-tab>
@@ -31,7 +33,8 @@
                     source-label="Available"
                     selected-label="Assigned"
                     field-level-help="Allows specific configurator to see and manage users for the campaign."
-                    options={options}
+                    options={userOptions}
+                    value={configuratorValues}
                     onchange={handleChange}>
                 </lightning-dual-listbox>
             </lightning-tab>
@@ -41,7 +44,7 @@
                     source-label="Available"
                     selected-label="Assigned"
                     field-level-help="Allows specific analysts to see, and view statistics for the campaign."
-                    options={options}
+                    options={userOptions}
                     onchange={handleChange}>
                 </lightning-dual-listbox>
             </lightning-tab>
