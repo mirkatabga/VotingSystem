@@ -7,11 +7,11 @@ import setAssignedUserIds from '@salesforce/apex/CampaignController.setAssignedU
 export default class ManageCampaignAssignmentsModal extends LightningModal {
     @api recordId;
 
-    userOptions = [];
-    voterValues = [];
-    moderatorValues = [];
-    configuratorValues = [];
-    analystValues = [];
+    userOptions;
+    voterValues;
+    moderatorValues;
+    configuratorValues;
+    analystValues;
 
     connectedCallback(){
         this.fetchUsers()
@@ -20,9 +20,16 @@ export default class ManageCampaignAssignmentsModal extends LightningModal {
 
                 this.fetchAssignments()
                     .then(results => {
+                            this.voterValues = [];
                             this.voterValues.push(...results[0]);
+                            
+                            this.moderatorValues = [];
                             this.moderatorValues.push(...results[1]);
+                            
+                            this.configuratorValues = [];
                             this.configuratorValues.push(...results[2]);
+                            
+                            this.analystValues = [];
                             this.analystValues.push(...results[3]);
                     });              
             });
