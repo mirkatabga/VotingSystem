@@ -1,7 +1,7 @@
 public with sharing class CampaignController {
 
     @AuraEnabled(cacheable=false)
-    public static List<Id> getAssignedUserIds(String campaignId, String userType) {
+    public static List<Id> getAssignedUserIds(Id campaignId, String userType) {
         List<User_Campaign__c> userCampaigns = [
             SELECT User__c
             FROM User_Campaign__c
@@ -18,34 +18,48 @@ public with sharing class CampaignController {
     }
 
     @AuraEnabled(cacheable=false)
-    public static void setAssignedUserIds(String campaignId, String assignmentsJson) {
+    public static void setAssignedUserIds(Id campaignId, String assignmentsJson) {
         Assignments assignments = (Assignments)json.deserialize(assignmentsJson, Assignments.class);
 
-        if (assignments.Voters != null && assignments.Voters.size() > 0) {
-            setAssignments(assignments.Voters, 'Voter', campaignId);
+        if (assignments.Voters != null) {
+            String userType = 'Voter';
+            deleteAssignments(campaignId,  userType);
+            setAssignments(assignments.Voters, campaignId, userType);
         }
 
-        if (assignments.Moderators != null && assignments.Moderators.size() > 0) {
-            setAssignments(assignments.Moderators, 'Moderator', campaignId);
+        if (assignments.Moderators != null) {
+            String userType = 'Moderator';
+            deleteAssignments(campaignId,  userType);
+            setAssignments(assignments.Moderators, campaignId, userType);
         }
 
-        if (assignments.Configurators != null && assignments.Configurators.size() > 0) {
-            setAssignments(assignments.Configurators, 'Configurator', campaignId);
+        if (assignments.Configurators != null) {
+            String userType = 'Configurator';
+            deleteAssignments(campaignId,  userType);
+            setAssignments(assignments.Configurators, campaignId, userType);
         }
 
-        if (assignments.Analysts != null && assignments.Analysts.size() > 0) {
-            setAssignments(assignments.Analysts, 'Analyst', campaignId);
+        if (assignments.Analysts != null) {
+            String userType = 'Analyst';
+            deleteAssignments(campaignId,  userType);
+            setAssignments(assignments.Analysts, campaignId, userType);
         }
 
         System.debug(assignments);
     }
 
-    private static void setAssignments(List<Id> userIds, String userType, String campaignId){
+    private static void deleteAssignments(Id campaignId, String userType){
         delete [
             SELECT Id
             FROM User_Campaign__c
-            WHERE User__c IN :userIds AND RecordType.Name = :userType
+            WHERE Campaign__c = :campaignId AND RecordType.Name = :userType
         ];
+    }
+
+    private static void setAssignments(List<Id> userIds, Id campaignId, String userType){
+        if(userIds.size() == 0){
+            return;
+        }
 
         Id recordTypeId = Schema.SObjectType.User_Campaign__c.getRecordTypeInfosByDeveloperName()
             .get(userType).getRecordTypeId();

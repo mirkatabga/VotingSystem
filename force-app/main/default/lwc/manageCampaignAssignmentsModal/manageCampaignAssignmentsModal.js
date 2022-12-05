@@ -47,6 +47,8 @@ export default class ManageCampaignAssignmentsModal extends LightningModal {
             values[listBox.dataset.type] = listBox.value;
         });
 
+        console.log(JSON.stringify(values));
+
         await setAssignedUserIds(
             { 
                 campaignId: this.recordId, 
