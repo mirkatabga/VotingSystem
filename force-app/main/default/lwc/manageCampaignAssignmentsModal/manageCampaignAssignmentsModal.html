@@ -5,25 +5,23 @@
             <lightning-tab label="Voters">
                 <lightning-dual-listbox name="votersDLB"
                     label="Assign Voters to Campaign"
-                    data-type="voters"
+                    data-type="Voters"
                     source-label="Available"
                     selected-label="Assigned"
                     field-level-help="Allows specific voters to see and vote in the campaign."
                     options={userOptions}
-                    value={voterValues}
-                    onchange={handleChange}>
+                    value={voterValues}>
                 </lightning-dual-listbox>
             </lightning-tab>
             <lightning-tab label="Moderators"> 
                 <lightning-dual-listbox name="moderatorsDLB"
                     label="Assign Moderators to Campaign"
-                    data-type="moderators"
+                    data-type="Moderators"
                     source-label="Available"
                     selected-label="Assigned"
                     field-level-help="Allows specific moderators to see, start/stop and view statistics for the campaign."
                     options={userOptions}
-                    value={moderatorValues}
-                    onchange={handleChange}>
+                    value={moderatorValues}>
                 </lightning-dual-listbox>
             </lightning-tab>
             <lightning-tab label="Configurators"> 
@@ -34,18 +32,18 @@
                     selected-label="Assigned"
                     field-level-help="Allows specific configurator to see and manage users for the campaign."
                     options={userOptions}
-                    value={configuratorValues}
-                    onchange={handleChange}>
+                    value={configuratorValues}>
                 </lightning-dual-listbox>
             </lightning-tab>
             <lightning-tab label="Analysts">
                 <lightning-dual-listbox name="analystsDLB"
                     label="Assign Analysts to Campaign"
+                    data-type="Analysts"
                     source-label="Available"
                     selected-label="Assigned"
                     field-level-help="Allows specific analysts to see, and view statistics for the campaign."
                     options={userOptions}
-                    onchange={handleChange}>
+                    value={analystValues}>
                 </lightning-dual-listbox>
             </lightning-tab>
         </lightning-tabset>

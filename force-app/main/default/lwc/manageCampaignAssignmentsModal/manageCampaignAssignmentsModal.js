@@ -2,6 +2,7 @@ import { api } from 'lwc';
 import LightningModal from 'lightning/modal';
 import getUsers from '@salesforce/apex/UserController.getUsers';
 import getAssignedUserIds from '@salesforce/apex/CampaignController.getAssignedUserIds';
+import setAssignedUserIds from '@salesforce/apex/CampaignController.setAssignedUserIds';
 
 export default class ManageCampaignAssignmentsModal extends LightningModal {
     @api recordId;
@@ -12,29 +13,40 @@ export default class ManageCampaignAssignmentsModal extends LightningModal {
     configuratorValues = [];
     analystValues = [];
 
-    async connectedCallback(){
-        const users = await this.fetchUsers();
-        this.userOptions = this.mapUsersToOptions(users);
-        const results = await this.fetchAssignments();
+    connectedCallback(){
+        this.fetchUsers()
+            .then(users => {
+                this.userOptions = this.mapUsersToOptions(users);
 
-        this.voterValues.push(...results[0]);
-        this.moderatorValues.push(...results[1]);
-        this.configuratorValues.push(...results[2]);
-        this.analystValues.push(...results[3]);
+                this.fetchAssignments()
+                    .then(results => {
+                            this.voterValues.push(...results[0]);
+                            this.moderatorValues.push(...results[1]);
+                            this.configuratorValues.push(...results[2]);
+                            this.analystValues.push(...results[3]);
+                    });              
+            });
     }
 
     handleClose(){
-        console.log('close handler');
         this.close('canceled');
     }
 
-    handleSave(){
-        console.log('success handler');
-        this.close('success');
-    }
+    async handleSave(){
+        let listBoxes = this.template.querySelectorAll('lightning-dual-listbox');
+        const values = {};
 
-    handleChange(event){
-        console.log(event.target);
+        listBoxes.forEach(listBox => {
+            values[listBox.dataset.type] = listBox.value;
+        });
+
+        await setAssignedUserIds(
+            { 
+                campaignId: this.recordId, 
+                assignmentsJson: JSON.stringify(values) 
+            });
+
+        this.close('success');
     }
 
     fetchUsers(){

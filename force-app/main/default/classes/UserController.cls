@@ -1,5 +1,5 @@
 public with sharing class UserController {
-    @AuraEnabled
+    @AuraEnabled(cacheable=false)
     public static List<User> getUsers() {
         return [
             SELECT Id, Name
