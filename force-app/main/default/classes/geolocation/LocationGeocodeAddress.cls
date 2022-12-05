@@ -17,7 +17,7 @@ public with sharing class LocationGeocodeAddress {
             SELECT Name, Address__c
             FROM Location__c
             WHERE id = :locationId
-            Limit 1
+            LIMIT 1
         ];
 
         if ((geoLocation.Address__c == null)) {
@@ -25,11 +25,17 @@ public with sharing class LocationGeocodeAddress {
         }
 
         String geoAddress = geoLocation.Address__c;
-        
+
         geoAddress = EncodingUtil.urlEncode(geoAddress, 'UTF-8');
         Http http = new Http();
         HttpRequest request = new HttpRequest();
-        request.setEndpoint('https://maps.googleapis.com/maps/api/geocode/json?address=' + geoAddress + '&key=' + geocodingKey + '&sensor=false');
+        request.setEndpoint(
+            'https://maps.googleapis.com/maps/api/geocode/json?address=' +
+            geoAddress +
+            '&key=' +
+            geocodingKey +
+            '&sensor=false'
+        );
         request.setMethod('GET');
         request.setTimeout(60000);
         try {
@@ -45,10 +51,9 @@ public with sharing class LocationGeocodeAddress {
                         String locationText = responseParser.getText();
 
                         responseParser.nextToken();
-                        if (locationText == 'lat'){
+                        if (locationText == 'lat') {
                             latitude = responseParser.getDoubleValue();
-                        }
-                        else if (locationText == 'lng')
+                        } else if (locationText == 'lng')
                             longitude = responseParser.getDoubleValue();
                     }
                 }

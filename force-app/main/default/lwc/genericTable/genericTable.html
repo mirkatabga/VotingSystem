@@ -24,11 +24,12 @@
 
         <lightning-quick-action-panel if:true={mangeClicked} header="Manage Records">
             <lightning-dual-listbox class="slds-p-around_large" name="records" label="Select Records"
-            source-label="Available" selected-label="Selected" field-level-help="Select Records" options={options}
-            value={selected} onchange={handleRecordsChange}></lightning-dual-listbox>
+                source-label="Available" selected-label="Selected" field-level-help="Select Records" options={options}
+                value={selected} onchange={handleRecordsChange}></lightning-dual-listbox>
             <div slot="footer">
                 <lightning-button variant="neutral" label="Cancel" onclick={closeManageComponent}></lightning-button>
-                <lightning-button variant="brand" label="Save" class="slds-m-left_x-small" onclick={handleSave}></lightning-button>
+                <lightning-button variant="brand" label="Save" class="slds-m-left_x-small" onclick={handleSave}>
+                </lightning-button>
             </div>
         </lightning-quick-action-panel>
 

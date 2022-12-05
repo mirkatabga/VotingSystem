@@ -1,6 +1,6 @@
 @isTest
 public with sharing class LocationGeocodeAdressTests {
-    @IsTest
+    @isTest
     private static void testCoventToGeolocation() {
         // Arrange
         List<Location__c> locs = VotingDataFactory.createLocations();

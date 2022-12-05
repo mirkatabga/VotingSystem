@@ -16,6 +16,7 @@ import UserNameFIELD from '@salesforce/schema/User.Name';
 const CAMPAIGN = 'Campaign';
 const SURVEY = 'Survey';
 const ANSWER = 'Answer';
+const QUESTION = 'Question';
 
 export default class GenericTable extends NavigationMixin(LightningElement) {
     @api recordId;
@@ -71,7 +72,7 @@ export default class GenericTable extends NavigationMixin(LightningElement) {
             this.title = 'Survey Questions';
             this.fetchSurveyQuestions();
             this.fetchPotentialQuestions();
-        } else if (apiName.includes(ANSWER)) {
+        } else if (apiName.includes(QUESTION)) {
             this.title = 'Question Answers';
             this.fetchQuestionAnswers();
             this.fetchPotentialAnswers();

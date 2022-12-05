@@ -84,10 +84,7 @@ public with sharing class VotingDataFactory {
         Survey__c testSurvey = new Survey__c(Campaign_Id__c = testCampaign.Id, Name = 'First Survey');
         insert testSurvey;
 
-        Survey_Question__c testSurveyQuestion = new Survey_Question__c(
-            Question_Id__c = testQuestion.Id,
-            Survey_Id__c = testSurvey.Id
-        );
+        Survey_Question__c testSurveyQuestion = new Survey_Question__c(Question_Id__c = testQuestion.Id, Survey_Id__c = testSurvey.Id);
         insert testSurveyQuestion;
 
         return testSurveyQuestion;
@@ -100,7 +97,7 @@ public with sharing class VotingDataFactory {
         Location__c testLocation = new Location__c(Name = 'First Location', Address__c = 'First Address');
         insert testLocation;
 
-        Campaign_Location__c testCampaingLocation = new 	Campaign_Location__c(
+        Campaign_Location__c testCampaingLocation = new Campaign_Location__c(
             Campaign_Id__c = testCampaign.Id,
             Location_Id__c = testLocation.Id
         );
