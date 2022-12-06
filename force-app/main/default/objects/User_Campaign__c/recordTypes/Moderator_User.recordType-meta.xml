@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Moderator_User</fullName>
+    <active>true</active>
+    <description>User with &quot;Moderator&quot; role.</description>
+    <label>Moderator User</label>
+</RecordType>
