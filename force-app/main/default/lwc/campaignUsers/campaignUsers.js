@@ -1,9 +1,17 @@
+// LWC
 import { LightningElement, api } from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
-import getUserByCampaign from '@salesforce/apex/UserCampaignController.getUserByCampaign';
 import { subscribe, unsubscribe } from 'lightning/empApi';
+
+// Apex Controllers
+import getUserByCampaign from '@salesforce/apex/UserCampaignController.getUserByCampaign';
+
+// Const
 const CHANNEL_NAME = '/event/Refresh_Record_Event__e';
 const ALL_USERS = 'all';
+
+// Utils
+import { mapDataUtils } from './mapDataUtils';
 
 export default class CampaignUsers extends NavigationMixin(LightningElement) {
     @api recordId;
@@ -42,7 +50,7 @@ export default class CampaignUsers extends NavigationMixin(LightningElement) {
         getUserByCampaign({ campaignId: this.recordId })
             .then(result => {
                 this.data = result;
-                this.mappedData = this.mapData();
+                this.mappedData = mapDataUtils.mapData(this.data);
                 this.initialRecords = this.mappedData;
                 this.totalRecords = this.mappedData.length;
                 this.handlePagination();
@@ -149,17 +157,6 @@ export default class CampaignUsers extends NavigationMixin(LightningElement) {
             this.totalRecords = this.mappedData.length;
             this.handlePagination();
         }
-    }
-
-    mapData() {
-        return this.data.map(x => {
-            return {
-                id: x.Id,
-                name: x.User_Id__r.Name,
-                role: x.RecordType.Name,
-                creatorName: x.CreatedBy.Name
-            };
-        });
     }
 
     get disableFirst() {

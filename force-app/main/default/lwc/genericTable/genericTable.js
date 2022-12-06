@@ -1,5 +1,12 @@
+// LWC
 import { LightningElement, api, wire } from 'lwc';
 import { getRecord } from 'lightning/uiRecordApi';
+import { NavigationMixin } from 'lightning/navigation';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import Id from '@salesforce/user/Id';
+import UserNameFIELD from '@salesforce/schema/User.Name';
+
+// Apex Controllers
 import getLocationByCampaign from '@salesforce/apex/LocationController.getLocationByCampaign';
 import saveCampaignLocations from '@salesforce/apex/UserCampaignController.saveCampaignLocations';
 import getQuestionBySurvey from '@salesforce/apex/QuestionController.getQuestionBySurvey';
@@ -9,14 +16,15 @@ import saveQuestionAnswers from '@salesforce/apex/QuestionController.saveQuestio
 import getPotentialQuestions from '@salesforce/apex/QuestionController.getPotentialQuestions';
 import getPotentialCampaignLocations from '@salesforce/apex/LocationController.getPotentialCampaignLocations';
 import getPotentialAnswers from '@salesforce/apex/AnswerController.getPotentialAnswers';
-import { NavigationMixin } from 'lightning/navigation';
-import { ShowToastEvent } from 'lightning/platformShowToastEvent';
-import Id from '@salesforce/user/Id';
-import UserNameFIELD from '@salesforce/schema/User.Name';
+
+// Const
 const CAMPAIGN = 'Campaign';
 const SURVEY = 'Survey';
 const ANSWER = 'Answer';
 const QUESTION = 'Question';
+
+// Utils
+import { mapDataUtils } from './mapDataUtils';
 
 export default class GenericTable extends NavigationMixin(LightningElement) {
     @api recordId;
@@ -141,7 +149,7 @@ export default class GenericTable extends NavigationMixin(LightningElement) {
 
     handleGetResultSuccess(result) {
         this.data = result;
-        this.mapAllDataTypes(result, true);
+        this.selectMapping(result, true);
         this.initialRecords = this.mappedData;
         this.totalRecords = this.mappedData.length;
         this.handlePagination();
@@ -159,7 +167,7 @@ export default class GenericTable extends NavigationMixin(LightningElement) {
             val => selectedRecords.find(x => x === val.Id)
         );
 
-        this.mapAllDataTypes(movedRecords, false);
+        this.selectMapping(movedRecords, false);
     }
 
     openManageComponent() {
@@ -185,7 +193,7 @@ export default class GenericTable extends NavigationMixin(LightningElement) {
 
     handleSave() {
         if (this.title.includes(CAMPAIGN)) {
-            const records = this.mapSelectedCampaignLocations();
+            const records = mapDataUtils.mapSelectedCampaignLocations(this.selected, this.recordId);
             saveCampaignLocations({ campaignLocations: records, campaignId: this.recordId })
                 .then(result => {
                     this.handleSaveSuccess(result);
@@ -194,7 +202,7 @@ export default class GenericTable extends NavigationMixin(LightningElement) {
                     this.handleSaveError(error);
                 });
         } else if (this.title.includes(SURVEY)) {
-            const records = this.mapSelectedSurveyQuestions();
+            const records = mapDataUtils.mapSelectedSurveyQuestions(this.selected, this.recordId);
             saveSurveyQuestions({ surveyQuestions: records, surveyId: this.recordId })
                 .then(result => {
                     this.handleSaveSuccess(result);
@@ -203,7 +211,7 @@ export default class GenericTable extends NavigationMixin(LightningElement) {
                     this.handleSaveError(error);
                 });
         } else if (this.title.includes(ANSWER)) {
-            const records = this.mapSelectedQuestionAnswers();
+            const records = mapDataUtils.mapSelectedQuestionAnswers(this.selected, this.recordId);
             saveQuestionAnswers({ answers: records, questionId: this.recordId })
                 .then(result => {
                     this.handleSaveSuccess(result);
@@ -242,86 +250,14 @@ export default class GenericTable extends NavigationMixin(LightningElement) {
         );
     }
 
-    mapCampaignData(data, isInitialLoad) {
-        return data.map(x => {
-            return {
-                id: isInitialLoad ? x.Location_Id__r.Id : x.Id,
-                name: isInitialLoad ? x.Location_Id__r.Name : x.Name,
-                creatorName: isInitialLoad ? x.CreatedBy.Name : this.currentUser
-            };
-        });
-    }
-
-    mapSurveyData(data, isInitialLoad) {
-        return data.map(x => {
-            return {
-                id: isInitialLoad ? x.Question_Id__r.Id : x.Id,
-                name: isInitialLoad ? x.Question_Id__r.Name : x.Name,
-                creatorName: isInitialLoad ? x.CreatedBy.Name : this.currentUser
-            };
-        });
-    }
-
-    mapQuestionData(data, isInitialLoad) {
-        return data.map(x => {
-            return {
-                id: isInitialLoad ? x.Answer_Option_Id__r.Id : x.Id,
-                name: isInitialLoad ? x.Answer_Option_Id__r.Name : x.Name,
-                creatorName: isInitialLoad ? x.CreatedBy.Name : this.currentUser
-            };
-        });
-    }
-
-    mapAllDataTypes(data, isInitial){
+    selectMapping (data, isInitial){
         if (this.title.includes(CAMPAIGN)) {
-            this.mappedData = this.mapCampaignData(data, isInitial);
+            this.mappedData = mapDataUtils.mapCampaignData(data, isInitial, this.currentUser);
         } else if (this.title.includes(SURVEY)) {
-            this.mappedData = this.mapSurveyData(data, isInitial);
+            this.mappedData = mapDataUtils.mapSurveyData(data, isInitial, this.currentUser);
         } else if (this.title.includes(ANSWER)) {
-            this.mappedData = this.mapQuestionData(data, isInitial);
+            this.mappedData = mapDataUtils.mapQuestionData(data, isInitial, this.currentUser);
         }
-    }
-
-    mapRecordsToDisplay(users) {
-        return users.map(x => {
-            return {
-                value: x.Id,
-                label: x.Name,
-            };
-        });
-    }
-
-    mapSelectedRecords(users) {
-        return users.map(x => {
-            return x.id
-        });
-    }
-
-    mapSelectedCampaignLocations() {
-        return this.selected.map(x => {
-            return {
-                Campaign_Id__c: this.recordId,
-                Location_Id__c: x,
-            };
-        });
-    }
-
-    mapSelectedSurveyQuestions() {
-        return this.selected.map(x => {
-            return {
-                Survey_Id__c: this.recordId,
-                Question_Id__c: x,
-            };
-        });
-    }
-
-    mapSelectedQuestionAnswers() {
-        return this.selected.map(x => {
-            return {
-                Question_Id__c: this.recordId,
-                Answer_Option_Id__c: x,
-            };
-        });
     }
 
     handlePagination() {
@@ -359,7 +295,7 @@ export default class GenericTable extends NavigationMixin(LightningElement) {
     get options() {
         let result = [];
         if (this.potentialRecords) {
-            result = this.mapRecordsToDisplay(this.potentialRecords);
+            result = mapDataUtils.mapRecordsToDisplay(this.potentialRecords);
         }
         return result;
     }
@@ -367,7 +303,7 @@ export default class GenericTable extends NavigationMixin(LightningElement) {
     get selected() {
         let result = [];
         if (this.mappedData) {
-            result = this.mapSelectedRecords(this.mappedData);
+            result = mapDataUtils.mapSelectedRecords(this.mappedData);
         }
         return result;
     }

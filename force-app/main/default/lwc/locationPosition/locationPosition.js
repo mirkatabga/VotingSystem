@@ -1,5 +1,8 @@
+// LWC
 import { LightningElement, api, wire } from 'lwc';
 import { getRecord } from 'lightning/uiRecordApi';
+
+// Const
 const LATITUDE = 'Location__c.Postion__Latitude__s'
 const LONGITUDE = 'Location__c.Postion__Longitude__s'
 
