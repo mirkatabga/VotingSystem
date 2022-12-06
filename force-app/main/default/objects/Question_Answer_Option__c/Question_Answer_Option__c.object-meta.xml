@@ -156,8 +156,9 @@
     <externalSharingModel>ControlledByParent</externalSharingModel>
     <label>Question Answer Option</label>
     <nameField>
-        <label>Question Answer Option Name</label>
-        <type>Text</type>
+        <displayFormat>Answer-{0}</displayFormat>
+        <label>Name</label>
+        <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Question Answer Options</pluralLabel>
     <searchLayouts></searchLayouts>

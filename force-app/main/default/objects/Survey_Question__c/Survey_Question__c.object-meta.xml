@@ -156,8 +156,9 @@
     <externalSharingModel>ControlledByParent</externalSharingModel>
     <label>Survey Question</label>
     <nameField>
-        <label>Survey Question Name</label>
-        <type>Text</type>
+        <displayFormat>Question-{0}</displayFormat>
+        <label>Name</label>
+        <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Survey Questions</pluralLabel>
     <searchLayouts></searchLayouts>

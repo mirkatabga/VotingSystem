@@ -1,0 +1,9 @@
+<template>
+    <lightning-map if:true={mapMarkers} class="slds-size_4-of-8" map-markers={mapMarkers} zoom-level={zoomLevel}>
+    </lightning-map>
+    <template if:true={error}>
+        <div class="slds-m-around_medium">
+            {error}
+        </div>
+    </template>
+</template>

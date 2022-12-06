@@ -1,0 +1,20 @@
+<template>
+    <template if:true={isComponentLoaded}>
+    <lightning-card if:true={isConfigurator}  title="Manage Campaign Users">
+        <lightning-layout horizontal-align="center">
+            <lightning-layout-item size="4" class="slds-p-around_small">
+                <lightning-combobox name="roles" label="Role" value={selectedRole} placeholder="Select Role"
+                    options={userRoleOptions} onchange={handleRoleChange}></lightning-combobox>
+            </lightning-layout-item>
+        </lightning-layout>
+        <lightning-dual-listbox class="slds-p-around_large" name="languages" label="Select Users"
+            source-label="Available" selected-label="Selected" field-level-help="Select users" options={userOptions}
+            value={selectedUsers} onchange={handleUsersChange}></lightning-dual-listbox>
+        <lightning-button variant="brand" label="Save" title="Primary action" onclick={handleSave}
+            class="slds-p-left_large slds-p-bottom_small"></lightning-button>
+    </lightning-card>
+    <lightning-card if:false={isConfigurator} title="Manage Campaign Users">
+        <p>You are not authorized to manage users for this Campaign.</p>
+    </lightning-card>
+    </template>
+</template>

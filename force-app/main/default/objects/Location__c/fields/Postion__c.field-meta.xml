@@ -3,7 +3,7 @@
     <fullName>Postion__c</fullName>
     <displayLocationInDecimal>false</displayLocationInDecimal>
     <externalId>false</externalId>
-    <label>Postion</label>
+    <label>Coordianates</label>
     <required>false</required>
     <scale>6</scale>
     <trackTrending>false</trackTrending>
