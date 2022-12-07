@@ -1,9 +1,4 @@
 public class CampaignService implements ICampaignService {
-    private static final String VOTER_RECORD_TYPE_NAME = 'Voter';
-    private static final String MODERATOR_RECORD_TYPE_NAME = 'Moderator';
-    private static final String CONFIGURATOR_RECORD_TYPE_NAME = 'Configurator';
-    private static final String ANALYST_RECORD_TYPE_NAME = 'Analyst';
-
     private final ICampaignRepository repo;
 
     public CampaignService() {
