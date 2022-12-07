@@ -1,8 +1,4 @@
 public class Assignments {
-    private static final String VOTER_RECORD_TYPE_NAME = 'Voter';
-    private static final String MODERATOR_RECORD_TYPE_NAME = 'Moderator';
-    private static final String CONFIGURATOR_RECORD_TYPE_NAME = 'Configurator';
-    private static final String ANALYST_RECORD_TYPE_NAME = 'Analyst';
     private Map<String, List<Id>> userIdsLookup = new Map<String, List<Id>>();
 
     public Assignments(
@@ -16,10 +12,10 @@ public class Assignments {
         this.Configurators = configurators;
         this.Analysts = analysts;
 
-        userIdsLookup.put(VOTER_RECORD_TYPE_NAME, Voters);
-        userIdsLookup.put(MODERATOR_RECORD_TYPE_NAME, Moderators);
-        userIdsLookup.put(CONFIGURATOR_RECORD_TYPE_NAME, Configurators);
-        userIdsLookup.put(ANALYST_RECORD_TYPE_NAME, Analysts);
+        userIdsLookup.put(ApplicationConstants.VOTER_RECORD_TYPE_NAME, Voters);
+        userIdsLookup.put(ApplicationConstants.MODERATOR_RECORD_TYPE_NAME, Moderators);
+        userIdsLookup.put(ApplicationConstants.CONFIGURATOR_RECORD_TYPE_NAME, Configurators);
+        userIdsLookup.put(ApplicationConstants.ANALYST_RECORD_TYPE_NAME, Analysts);
     }
 
     public final List<Id> Voters { get; private set; }
@@ -34,19 +30,19 @@ public class Assignments {
         List<String> userTypes = new List<String>();
 
         if (Voters != null){
-            userTypes.add(VOTER_RECORD_TYPE_NAME);
+            userTypes.add(ApplicationConstants.VOTER_RECORD_TYPE_NAME);
         }
 
         if (Moderators != null){
-            userTypes.add(MODERATOR_RECORD_TYPE_NAME);
+            userTypes.add(ApplicationConstants.MODERATOR_RECORD_TYPE_NAME);
         }
 
         if (Configurators != null){
-            userTypes.add(CONFIGURATOR_RECORD_TYPE_NAME);
+            userTypes.add(ApplicationConstants.CONFIGURATOR_RECORD_TYPE_NAME);
         }
 
         if (Analysts != null){
-            userTypes.add(ANALYST_RECORD_TYPE_NAME);
+            userTypes.add(ApplicationConstants.ANALYST_RECORD_TYPE_NAME);
         }
 
         return userTypes;
