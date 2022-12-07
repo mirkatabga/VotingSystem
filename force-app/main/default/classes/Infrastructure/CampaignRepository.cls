@@ -16,11 +16,11 @@ public with sharing class CampaignRepository implements ICampaignRepository {
         return ids;
     }
 
-    public void deleteAssignments(Id campaignId, String userType){
+    public void deleteAssignments(Id campaignId, List<String> userTypes){
         delete [
             SELECT Id
             FROM User_Campaign__c
-            WHERE Campaign__c = :campaignId AND RecordType.Name = :userType
+            WHERE Campaign__c = :campaignId AND RecordType.Name IN :userTypes
         ];
     }
 

@@ -10,7 +10,7 @@ public with sharing class CampaignController {
         AssignmentsViewModel assignmentsViewModel = (AssignmentsViewModel)json.deserialize(
             assignmentsJson, 
             AssignmentsViewModel.class);
-            
+
         Assignments assignments = MapToAssignments(assignmentsViewModel);
 
         ICampaignService campaignService = new CampaignService();
@@ -18,13 +18,14 @@ public with sharing class CampaignController {
     }
 
 	private static Assignments MapToAssignments(AssignmentsViewModel assignmentsViewModel){
-		Assignments assignments = new Assignments();
+		Assignments assignments = new Assignments(
+            assignmentsViewModel.Voters,
+            assignmentsViewModel.Moderators,
+            assignmentsViewModel.Configurators,
+            assignmentsViewModel.Analysts
+        );
 
-        assignments.Voters = assignmentsViewModel.Voters;
-        assignments.Moderators = assignmentsViewModel.Moderators;
-        assignments.Configurators = assignmentsViewModel.Configurators;
-        assignments.Analysts = assignmentsViewModel.Analysts;
-
+        System.debug(json.serialize(assignments));
         return assignments;
 	} 
 }

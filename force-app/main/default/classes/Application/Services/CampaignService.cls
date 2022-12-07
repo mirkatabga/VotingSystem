@@ -15,24 +15,12 @@ public class CampaignService implements ICampaignService {
     }
 
     public void setAssignedUserIds(Id campaignId, Assignments assignments){
-        if (assignments.Voters != null) {
-            repo.deleteAssignments(campaignId,  VOTER_RECORD_TYPE_NAME);
-            repo.setAssignments(assignments.Voters, campaignId, VOTER_RECORD_TYPE_NAME);
-        }
+        List<String> userTypes = assignments.GetUserTypesForAvailableData();
+        repo.deleteAssignments(campaignId, userTypes);
 
-        if (assignments.Moderators != null) {
-            repo.deleteAssignments(campaignId,  MODERATOR_RECORD_TYPE_NAME);
-            repo.setAssignments(assignments.Moderators, campaignId, MODERATOR_RECORD_TYPE_NAME);
-        }
-
-        if (assignments.Configurators != null) {
-            repo.deleteAssignments(campaignId,  CONFIGURATOR_RECORD_TYPE_NAME);
-            repo.setAssignments(assignments.Configurators, campaignId, CONFIGURATOR_RECORD_TYPE_NAME);
-        }
-
-        if (assignments.Analysts != null) {
-            repo.deleteAssignments(campaignId,  ANALYST_RECORD_TYPE_NAME);
-            repo.setAssignments(assignments.Analysts, campaignId, ANALYST_RECORD_TYPE_NAME);
-        }
+        for (String userType : userTypes) {
+            List<Id> userIds = assignments.GetUserIds(userType);
+            repo.setAssignments(userIds, campaignId, userType);
+        }       
     }
 }
