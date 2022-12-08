@@ -1,0 +1,63 @@
+<template>
+    <lightning-modal-header label="Manage assignments"></lightning-modal-header>
+    <lightning-modal-body>
+        <lightning-tabset>
+            <lightning-tab label="Voters">
+                <lightning-dual-listbox name="votersDLB"
+                    label="Assign Voters to Campaign"
+                    data-type="Voters"
+                    source-label="Available"
+                    selected-label="Assigned"
+                    field-level-help="Allows specific voters to see and vote in the campaign."
+                    options={userOptions}
+                    value={voterValues}>
+                </lightning-dual-listbox>
+            </lightning-tab>
+            <lightning-tab label="Moderators"> 
+                <lightning-dual-listbox name="moderatorsDLB"
+                    label="Assign Moderators to Campaign"
+                    data-type="Moderators"
+                    source-label="Available"
+                    selected-label="Assigned"
+                    field-level-help="Allows specific moderators to see, start/stop and view statistics for the campaign."
+                    options={userOptions}
+                    value={moderatorValues}>
+                </lightning-dual-listbox>
+            </lightning-tab>
+            <lightning-tab label="Configurators"> 
+                <lightning-dual-listbox name="configuratorsDLB"
+                    label="Assign Configurators to Campaign"
+                    data-type="Configurators"
+                    source-label="Available"
+                    selected-label="Assigned"
+                    field-level-help="Allows specific configurator to see and manage users for the campaign."
+                    options={userOptions}
+                    value={configuratorValues}>
+                </lightning-dual-listbox>
+            </lightning-tab>
+            <lightning-tab label="Analysts">
+                <lightning-dual-listbox name="analystsDLB"
+                    label="Assign Analysts to Campaign"
+                    data-type="Analysts"
+                    source-label="Available"
+                    selected-label="Assigned"
+                    field-level-help="Allows specific analysts to see, and view statistics for the campaign."
+                    options={userOptions}
+                    value={analystValues}>
+                </lightning-dual-listbox>
+            </lightning-tab>
+        </lightning-tabset>
+    </lightning-modal-body>
+    <lightning-modal-footer>
+        <lightning-button
+            label="Cancel"
+            onclick={handleClose}
+            class="slds-m-right_medium">
+        </lightning-button>
+        <lightning-button
+            label="Save"
+            onclick={handleSave}
+            variant="brand">
+        </lightning-button>
+    </lightning-modal-footer>
+</template>
